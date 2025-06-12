@@ -12,21 +12,17 @@ function StockChart({ data }) {
     <div style={{ width: '100%', height: '350px' }}>
       <ResponsiveContainer>
         <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-          <defs>
-            <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#4facfe" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#00f2fe" stopOpacity={0.1}/>
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E8EAED" />
           <XAxis 
             dataKey="date" 
-            tick={{ fontSize: 12, fill: '#666' }}
-            tickLine={{ stroke: '#666' }}
+            tick={{ fontSize: 12, fill: '#5F6368' }}
+            tickLine={{ stroke: '#DADCE0' }}
+            axisLine={{ stroke: '#DADCE0' }}
           />
           <YAxis 
-            tick={{ fontSize: 12, fill: '#666' }}
-            tickLine={{ stroke: '#666' }}
+            tick={{ fontSize: 12, fill: '#5F6368' }}
+            tickLine={{ stroke: '#DADCE0' }}
+            axisLine={{ stroke: '#DADCE0' }}
             tickFormatter={(value) => `¥${value?.toLocaleString()}`}
           />
           <Tooltip 
@@ -36,21 +32,20 @@ function StockChart({ data }) {
             ]}
             labelFormatter={(label) => `日付: ${label}`}
             contentStyle={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              backgroundColor: '#ffffff',
+              border: '1px solid #E8EAED',
               borderRadius: '8px',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+              color: '#202124'
             }}
           />
           <Line 
             type="monotone" 
             dataKey="price" 
-            stroke="url(#colorPrice)"
-            strokeWidth={3}
-            dot={{ fill: '#4facfe', strokeWidth: 2, r: 5 }}
-            activeDot={{ r: 8, stroke: '#4facfe', strokeWidth: 2, fill: '#fff' }}
-            fill="url(#colorPrice)"
+            stroke="#0969DA"
+            strokeWidth={2}
+            dot={{ fill: '#0969DA', strokeWidth: 2, r: 4 }}
+            activeDot={{ r: 6, stroke: '#0969DA', strokeWidth: 2, fill: '#ffffff' }}
           />
         </LineChart>
       </ResponsiveContainer>

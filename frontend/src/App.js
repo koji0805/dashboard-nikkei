@@ -48,14 +48,14 @@ function App() {
     <div className="app">
       <div className="container">
         <header className="header">
-          <h1>📈 日経平均株価ダッシュボード</h1>
-          <p>リアルタイム株価情報とチャート分析</p>
+          <h1>日経平均株価ダッシュボード</h1>
+          <p>リアルタイム株価情報とチャート分析システム</p>
         </header>
 
-        <div className="dashboard-grid">
+        <main className="dashboard-grid" role="main" aria-label="株価ダッシュボード">
           {latestStock && (
-            <div className="card price-card">
-              <h2>最新価格</h2>
+            <section className="card price-card" aria-labelledby="current-price-title">
+              <h2 id="current-price-title">最新価格</h2>
               <div className="price-value">
                 ¥{latestStock.close_price?.toLocaleString()}
               </div>
@@ -63,7 +63,7 @@ function App() {
                 <div className="price-detail">
                   <div className="price-detail-label">前日比</div>
                   <div className="price-detail-value" style={{
-                    color: change >= 0 ? '#10b981' : '#ef4444'
+                    color: change >= 0 ? 'var(--da-green-500)' : 'var(--da-red-500)'
                   }}>
                     {change >= 0 ? '+' : ''}¥{change?.toFixed(2)} ({changePercent?.toFixed(2)}%)
                   </div>
@@ -77,12 +77,13 @@ function App() {
                   <div className="price-detail-value">{latestStock.volume?.toLocaleString()}</div>
                 </div>
               </div>
-            </div>
+            </section>
           )}
 
           {latestStock && (
             <>
-              <div className="card">
+              <section className="card" aria-labelledby="ohlc-title">
+                <h3 id="ohlc-title" className="visually-hidden">始値・高値データ</h3>
                 <div className="stats-grid">
                   <div className="stat-item">
                     <div className="stat-label">始値</div>
@@ -93,9 +94,10 @@ function App() {
                     <div className="stat-value">¥{latestStock.high_price?.toLocaleString()}</div>
                   </div>
                 </div>
-              </div>
+              </section>
 
-              <div className="card">
+              <section className="card" aria-labelledby="close-title">
+                <h3 id="close-title" className="visually-hidden">安値・終値データ</h3>
                 <div className="stats-grid">
                   <div className="stat-item">
                     <div className="stat-label">安値</div>
@@ -106,30 +108,30 @@ function App() {
                     <div className="stat-value">¥{latestStock.close_price?.toLocaleString()}</div>
                   </div>
                 </div>
-              </div>
+              </section>
             </>
           )}
 
-          <div className="card chart-card">
-            <h2 className="chart-title">📊 価格推移チャート</h2>
+          <section className="card chart-card" aria-labelledby="chart-title">
+            <h2 id="chart-title" className="chart-title">価格推移チャート</h2>
             <StockChart data={stocks} />
-          </div>
-        </div>
+          </section>
+        </main>
 
-        <div className="data-table">
+        <section className="data-table" aria-labelledby="data-table-title">
           <div className="table-header">
-            <h2 className="table-title">📋 詳細データ</h2>
+            <h2 id="data-table-title" className="table-title">詳細データ</h2>
           </div>
           <div className="table-container">
-            <table className="table">
+            <table className="table" role="table" aria-label="株価詳細データテーブル">
               <thead>
                 <tr>
-                  <th>日付</th>
-                  <th>始値</th>
-                  <th>高値</th>
-                  <th>安値</th>
-                  <th>終値</th>
-                  <th>出来高</th>
+                  <th scope="col">日付</th>
+                  <th scope="col">始値</th>
+                  <th scope="col">高値</th>
+                  <th scope="col">安値</th>
+                  <th scope="col">終値</th>
+                  <th scope="col">出来高</th>
                 </tr>
               </thead>
               <tbody>
@@ -146,7 +148,7 @@ function App() {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
