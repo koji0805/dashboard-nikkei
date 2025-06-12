@@ -8,22 +8,48 @@ function StockChart({ data }) {
     volume: stock.volume
   })).reverse();
 
+  // Y軸の範囲を計算（現在価格から上下2000円程度）
+  const prices = chartData.map(d => d.price).filter(p => p > 0);
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const currentPrice = chartData[chartData.length - 1]?.price || 38000;
+  
+  // 現在価格を基準に上下2000円の範囲を設定
+  const yAxisMin = Math.max(0, currentPrice - 2000);
+  const yAxisMax = currentPrice + 2000;
+  
+  // ただし、実際のデータがこの範囲を超える場合は調整
+  const finalMin = Math.min(yAxisMin, minPrice - 500);
+  const finalMax = Math.max(yAxisMax, maxPrice + 500);
+
   return (
-    <div style={{ width: '100%', height: '350px' }}>
-      <ResponsiveContainer>
-        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+    <div style={{ width: '100%', height: '350px', position: 'relative' }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart 
+          data={chartData} 
+          margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+        >
+          <defs>
+            <clipPath id="chart-area">
+              <rect x="0" y="0" width="100%" height="100%" />
+            </clipPath>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#E8EAED" />
           <XAxis 
             dataKey="date" 
-            tick={{ fontSize: 12, fill: '#5F6368' }}
-            tickLine={{ stroke: '#DADCE0' }}
-            axisLine={{ stroke: '#DADCE0' }}
+            tick={{ fontSize: 10, fill: '#5F6368' }}
+            axisLine={false}
+            tickLine={false}
+            interval="preserveStartEnd"
+            minTickGap={5}
           />
           <YAxis 
-            tick={{ fontSize: 12, fill: '#5F6368' }}
-            tickLine={{ stroke: '#DADCE0' }}
-            axisLine={{ stroke: '#DADCE0' }}
-            tickFormatter={(value) => `¥${value?.toLocaleString()}`}
+            domain={[finalMin, finalMax]}
+            tick={{ fontSize: 10, fill: '#5F6368' }}
+            tickLine={false}
+            axisLine={false}
+            width={60}
+            tickFormatter={(value) => `¥${Math.round(value).toLocaleString()}`}
           />
           <Tooltip 
             formatter={(value, name) => [
@@ -43,9 +69,10 @@ function StockChart({ data }) {
             type="monotone" 
             dataKey="price" 
             stroke="#0969DA"
-            strokeWidth={2}
-            dot={{ fill: '#0969DA', strokeWidth: 2, r: 4 }}
-            activeDot={{ r: 6, stroke: '#0969DA', strokeWidth: 2, fill: '#ffffff' }}
+            strokeWidth={3}
+            dot={false}
+            activeDot={{ r: 5, stroke: '#0969DA', strokeWidth: 2, fill: '#ffffff' }}
+            connectNulls={false}
           />
         </LineChart>
       </ResponsiveContainer>
